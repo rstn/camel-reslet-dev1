@@ -1,0 +1,1955 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--suppress SpringFacetInspection -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:oapi="http://oapi.peterservice.com/model/service/v1"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://oapi.peterservice.com/model/service/v1 http://oapi.peterservice.com/model/service/v1.xsd">
+    <openapi-service xmlns="http://oapi.peterservice.com/model/service/v1">
+        <description>Subscribers service</description>
+        <name>subscribers</name>
+        <version>1.0</version>
+        <namespace>openapi</namespace>
+
+        <policy>
+            <makeInnerApiCopy>true</makeInnerApiCopy>
+            <compositeCallsWithoutHttp>true</compositeCallsWithoutHttp>
+            <backendPolicy>
+                <connectionTimeout>10000</connectionTimeout>
+            </backendPolicy>
+        </policy>
+
+        <restlet-to-restlet>
+            <frontend>
+                <httpPort>22003</httpPort>
+            </frontend>
+            <backend>
+                <url>oapi-bis-backend-${version}/backend/subscribers</url>
+                <zkInstancesPath>/ps/instances/apps/oapi-bis-backend</zkInstancesPath>
+                <version>7.0</version>
+                <zkVersionsPath>/ps/config/apps/OAPI_BIS_API_BACKEND</zkVersionsPath>
+                <subsystemName>OAPI_BIS_API_BACKEND</subsystemName>
+                <implementingBean>subscribersServiceImpl</implementingBean>
+                <commonPreprocessorBean>timeZones</commonPreprocessorBean>
+            </backend>
+
+
+            <api-functions>
+
+
+                <!-- access method -->
+                <function id="subscriberRootAllowedURLS" url="{subscriberId}/allowedURLs">
+                    <description/>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <methods>get</methods>
+                    <processWithObject>com.peterservice.oapi.service.accessbeans.GetAllowedURLsImpl</processWithObject>
+                </function>
+
+                <!-- financial accumulator -->
+                <function id="periodicAccumulatorsSearch" url="{subscriberId}/periodicAccumulators/search">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_PERIODIC_ACCUMULATORS</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="periodicAccumulators" url="{subscriberId}/periodicAccumulators">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>{subscriberId}/periodicAccumulators/search</customBackendFunctionUrl>
+                </function>
+                <function id="addPeriodicAccumulators" url="{subscriberId}/periodicAccumulators">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="annulPeriodicAccumulators" url="{subscriberId}/periodicAccumulators/annul">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+
+                <!-- installments -->
+                <function id="activateSubscribersInstalment" url="{subscriberId}/instalments/activate">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="deactivateSubscribersInstalment" url="{subscriberId}/instalments/deactivate">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="subscribersInstalmentRemains" url="{subscriberId}/instalmentRemains">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="subscribersInstalmentsSearch" url="{subscriberId}/instalments/search">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_SUBSCRIBERS_INSTALMENTS</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="subscribersInstalments" url="{subscriberId}/instalments">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>{subscriberId}/instalments/search</customBackendFunctionUrl>
+                </function>
+                <function id="checkActivateSubscribersInstalment" url="{subscriberId}/instalments/activate/check">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="checkDeactivateSubscribersInstalment" url="{subscriberId}/instalments/deactivate/check">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="parametersActivateSubscribersInstalment" url="{subscriberId}/instalments/activate/parameters">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="parametersDeactivateSubscribersInstalment" url="{subscriberId}/instalments/deactivate/parameters">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="subscribersInstalmentsPayPart" url="{subscriberId}/instalments/payPart">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="subscribersInstalmentsPayPartCheck" url="{subscriberId}/instalments/payPart/check">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="subscribersInstalmentsPayPartParameters" url="{subscriberId}/instalments/payPart/parameters">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="subscribersInstalmentsAllowedActionsSearch" url="{subscriberId}/instalments/allowedActions/search">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_SUBSCRIBERS_INSTALMENTS_ALLOWED_ACTIONS</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="subscribersInstalmentsAllowedActions" url="{subscriberId}/instalments/allowedActions">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>{subscriberId}/instalments/allowedActions/search</customBackendFunctionUrl>
+                </function>
+
+
+
+                <!-- basic subscriber methods-->
+                <function id="subscriberBaseInfo" url="{subscriberId}/baseInfo">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="subscriberServicesSummary" url="{subscriberId}/subscriberServicesSummary">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <internalOnly>true</internalOnly>
+                </function>
+                <function id="subscriberSegment" url="{subscriberId}/subscriberSegment">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <internalOnly>true</internalOnly>
+                </function>
+                <function id="subscriberPersonalData" url="{subscriberId}/personalData">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <internalOnly>true</internalOnly>
+                </function>
+                <function id="subscriberBalance" url="{subscriberId}/subscriberBalance">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <internalOnly>true</internalOnly>
+                </function>
+                <function id="phoneNumberBaseInfo" url="{subscriberId}/phoneBaseInfo/{phoneNumberId}">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="phoneBaseInfo" url="{subscriberId}/phoneBaseInfo">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="mobileSubscriber" url="{subscriberId}/mobileSubscriber">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <internalOnly>true</internalOnly>
+                </function>
+
+                <!-- test method -->
+                <function id="echo" url="echo">
+                    <description/>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <methods>get,post</methods>
+                </function>
+
+                <!-- services -->
+                <function id="servicesAllowedActionsSearch" url="{subscriberId}/services/allowedActions/search">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_SERVICES_ALLOWED_ACTIONS</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="servicesAllowedActions" url="{subscriberId}/services/allowedActions">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>{subscriberId}/services/allowedActions/search</customBackendFunctionUrl>
+                </function>
+
+                <!-- access method -->
+                <function id="subscriberServicesAllowedURLS" url="{subscriberId}/services/allowedURL">
+                    <description/>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <methods>get</methods>
+                    <processWithObject>com.peterservice.oapi.service.accessbeans.GetAllowedURLsImpl</processWithObject>
+                </function>
+
+                <function id="serviceAvailableForActivateListInfo1" url="{subscriberId}/services/availableForActivateListInfo1">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <internalOnly>true</internalOnly>
+                </function>
+                <function id="serviceAvailableForActivateListInfo2" url="{subscriberId}/services/availableForActivateListInfo2">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <internalOnly>true</internalOnly>
+                </function>
+                <function id="serviceIPAddresses" url="{subscriberId}/services/availableForActivate/{serviceId}/accessPoints/{accessPointId}/IPAddresses">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="serviceAccessPoints" url="{subscriberId}/services/availableForActivate/{serviceId}/accessPoints">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+                <!--This function is called only by serviceActivationParametersEnrichedWithGup -->
+                <function id="serviceActivationParameters" url="{subscriberId}/services/activate/parameters/helper">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>{subscriberId}/services/activate/parameters</customBackendFunctionUrl>
+                    <internalOnly>true</internalOnly>
+                </function>
+                <function id="serviceActivationParametersEnrichedWithGup" url="{subscriberId}/services/activate/parameters">
+                    <description/>
+                    <access><role>ROLE_Anybody</role></access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <processWithObject>com.peterservice.openapi.subscribers.GUPProfilesProcessorActivateParameters</processWithObject>
+                </function>
+
+                <function id="serviceActivateCheck" url="{subscriberId}/services/activate/check">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="serviceActivate" url="{subscriberId}/services/activate">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="subscriberServiceListInfo1" url="{subscriberId}/services/subscriberServiceListInfo1">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get,post</methods>
+                    <internalOnly>true</internalOnly>
+                </function>
+                <function id="subscriberServiceListInfo2" url="{subscriberId}/services/subscriberServiceListInfo2">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get,post</methods>
+                    <internalOnly>true</internalOnly>
+                </function>
+                <function id="subscriberServiceListInfo3" url="{subscriberId}/services/subscriberServiceListInfo3">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get,post</methods>
+                    <internalOnly>true</internalOnly>
+                </function>
+
+                <function id="serviceDeactivationParameters" url="{subscriberId}/services/{serviceId}/deactivate/parameters">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="serviceDeactivateCheck" url="{subscriberId}/services/{serviceId}/deactivate/check">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="serviceDeactivateCharges" url="{subscriberId}/services/{serviceId}/deactivate/charges">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+                <!-- 49763 -->
+                <function id="serviceChangeStatusToWaitForPaid" url="{subscriberId}/services/changeStatusToWaitForPaid">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="serviceActivateWithStatusWaitForPaid" url="{subscriberId}/services/activateWithStatusWaitForPaid">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="servicesAvailableForManualBanListInfo1" url="{subscriberId}/services/availableForManualBanListInfo1">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get,post</methods>
+                    <internalOnly>true</internalOnly>
+                </function>
+                <function id="servicesAvailableForManualBanListInfo2" url="{subscriberId}/services/availableForManualBanListInfo2">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get,post</methods>
+                    <internalOnly>true</internalOnly>
+                </function>
+
+                <function id="serviceBansHistorySearch" url="{subscriberId}/services/{serviceId}/bans/history/search">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_SERVICE_BANS_HISTORY</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                    <customBackendFunctionUrl>{subscriberId}/services/{serviceId}/bans/history</customBackendFunctionUrl>
+                </function>
+                <function id="serviceBansHistory" url="{subscriberId}/services/{serviceId}/bans/history">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+
+                <function id="serviceBansSearch" url="{subscriberId}/services/{serviceId}/bans/search">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_SERVICE_BANS</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="serviceBans" url="{subscriberId}/services/{serviceId}/bans">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>{subscriberId}/services/{serviceId}/bans/search</customBackendFunctionUrl>
+                </function>
+
+
+                <function id="serviceManualBan" url="{subscriberId}/services/{serviceId}/manualBan">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="serviceManualUnban" url="{subscriberId}/services/{serviceId}/manualUnban">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+
+                <!--Should be called only from Java processors-->
+                <function id="serviceAllowedActionsSearch" url="{subscriberId}/services/{serviceId}/allowedActionsBis">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_SERVICE_ALLOWED_ACTIONS</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                    <customBackendFunctionUrl>{subscriberId}/services/{serviceId}/allowedActions/search</customBackendFunctionUrl>
+                    <internalOnly>true</internalOnly>
+                </function>
+                <function id="serviceAllowedActions" url="{subscriberId}/services/{serviceId}/allowedActionsBis">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>{subscriberId}/services/{serviceId}/allowedActions/search</customBackendFunctionUrl>
+                    <internalOnly>true</internalOnly>
+                </function>
+
+                <!--Java wrappers around direct-to-backend routes-->
+                <function id="serviceAllowedActionsSearchJava" url="{subscriberId}/services/{serviceId}/allowedActions/search">
+                    <description/>
+                    <access><role>ROLE_Anybody</role></access>
+                    <methods>post</methods>
+                    <processWithObject>com.peterservice.openapi.subscribers.ServiceAllowedActionsProcessor</processWithObject>
+                </function>
+                <function id="serviceAllowedActionsJava" url="{subscriberId}/services/{serviceId}/allowedActions">
+                    <description/>
+                    <access><role>ROLE_Anybody</role></access>
+                    <methods>get</methods>
+                    <processWithObject>com.peterservice.openapi.subscribers.ServiceAllowedActionsProcessor</processWithObject>
+                </function>
+
+                <function id="serviceUpdateParameters" url="{subscriberId}/services/{serviceId}/update/parameters">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+
+                <function id="packsAllowedActionsSearch" url="{subscriberId}/packs/allowedActions/search">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_PACKS_ALLOWED_ACTIONS</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="packsAllowedActions" url="{subscriberId}/packs/allowedActions">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>{subscriberId}/packs/allowedActions/search</customBackendFunctionUrl>
+                </function>
+
+                <function id="packAllowedActionsSearch" url="{subscriberId}/packs/{subscriberPackId}/allowedActions/search">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_PACK_ALLOWED_ACTIONS</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="packAllowedActions" url="{subscriberId}/packs/{subscriberPackId}/allowedActions">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>{subscriberId}/packs/{subscriberPackId}/allowedActions/search</customBackendFunctionUrl>
+                </function>
+                <function id="serviceSpecificAttributes" url="{subscriberId}/services/{serviceId}/serviceSpecificAttributes">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <internalOnly>true</internalOnly>
+                </function>
+                <function id="packsCalculateSubscriptionFee" url="{subscriberId}/packs/calculateSubscriptionFee">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+
+
+                <function id="getDiscountsAvailableForActivateSearchForSubscriber" url="{subscriberId}/discounts/availableForActivate/search">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="getDiscountsAvailableForActivateForSubscriber" url="{subscriberId}/discounts/availableForActivate">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_GET_DISCOUNTS_AVAILABLE_FOR_ACTIVATE_SEARCH_FOR_SUBSCRIBER</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>{subscriberId}/discounts/availableForActivate/search</customBackendFunctionUrl>
+                </function>
+                <function id="checkActivateCallCreditForSubscriber" url="{subscriberId}/discounts/activate/check">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="activateCallCreditForSubscriber" url="{subscriberId}/discounts/activate">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="checkEditCallCreditForSubscriber" url="{subscriberId}/discounts/{discountId}/update/check">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="editCallCreditForSubscriber" url="{subscriberId}/discounts/{discountId}">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>put</methods>
+                </function>
+                <function id="checkDeactivateCallCreditForSubscriber" url="{subscriberId}/discounts/{discountId}/deactivate/check">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="deactivateCallCreditForSubscriber" url="{subscriberId}/discounts/{discountId}/deactivate">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+
+
+                <function id="serviceDeactivate" url="{subscriberId}/services/{serviceId}/deactivate">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="serviceActivateCharges" url="{subscriberId}/services/activate/charges">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="serviceCosts" url="{subscriberId}/services/{serviceId}/serviceCosts">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <internalOnly>true</internalOnly>
+                </function>
+                <function id="nearestServiceChange" url="{subscriberId}/services/{serviceId}/nearestServiceChangeEvent">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <internalOnly>true</internalOnly>
+                </function>
+                <function id="dependentServices" url="{subscriberId}/services/{serviceId}/dependentServices">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="serviceOrders" url="{subscriberId}/services/{serviceId}/orders">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="serviceHistorySearch" url="{subscriberId}/services/{serviceId}/history/search">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_SERVICE_HISTORY</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                    <customBackendFunctionUrl>{subscriberId}/services/{serviceId}/history</customBackendFunctionUrl>
+                </function>
+                <function id="serviceHistory" url="{subscriberId}/services/{serviceId}/history">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="subscriberService" url="{subscriberId}/services/{serviceId}/baseInfo">
+                    <description/>
+                    <access>
+                        <role>ROLE_OAPI10ResourceOwner</role>
+                    </access>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="serviceUpdate" url="{subscriberId}/services/{serviceId}">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>put</methods>
+                </function>
+                <function id="serviceRequestDetail" url="{subscriberId}/requests/{requestId}/details/{detailNumber}">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="serviceRequestDetailList" url="{subscriberId}/requests/{requestId}/details">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="serviceRequest" url="{subscriberId}/requests/{requestId}/baseInfo">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+                <function id="packSubscriptionFeeDscntForActivateSearch" url="{subscriberId}/packs/subscriptionFeeDiscounts/availableForActivate/search">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_PACK_SUBSCRIPTION_FEE_DSCNT_FOR_ACTIVATE</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="packSubscriptionFeeDscntForActivate" url="{subscriberId}/packs/subscriptionFeeDiscounts/availableForActivate">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>{subscriberId}/packs/subscriptionFeeDiscounts/availableForActivate/search</customBackendFunctionUrl>
+                </function>
+                <function id="packSubscriptionFeeDiscountsAvailable" url="{subscriberId}/packs/{subscriberPackId}/subscriptionFeeDiscounts">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get,post</methods>
+                </function>
+                <function id="packSubscriptionFeeDscntActivate" url="{subscriberId}/packs/{subscriberPackId}/subscriptionFeeDiscounts/activate">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="packSubscriptionFeeDscntDeactivate" url="{subscriberId}/packs/{subscriberPackId}/subscriptionFeeDiscounts/{packSubscriptionFeeDiscountId}/deactivate">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="packUpdateParameters" url="{subscriberId}/packs/{subscriberPackId}/update/parameters">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+
+                <!-- SIM cards and related staff -->
+                <!-- access method -->
+                <function id="subscriberSIMCardsAllowedURLS" url="{subscriberId}/SIMCards/allowedURL">
+                    <description/>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <methods>get</methods>
+                    <processWithObject>com.peterservice.oapi.service.accessbeans.GetAllowedURLsImpl</processWithObject>
+                </function>
+
+                <function id="SIMCardsImplemented" url="{subscriberId}/SIMCards/isImplemented">
+                    <description/>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="SIMCardsLinkingAllowed" url="{subscriberId}/SIMCards/linkingAllowed">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+
+                <function id="switches" url="{subscriberId}/SIMCards/switches">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+                <!--<function id="subscriberSIMCardHistory" url="{subscriberId}/SIMCards/history">-->
+                    <!--<description/>-->
+                    <!--<access>-->
+                    <!--</access>-->
+                    <!--<externalAccessDescriptor>*</externalAccessDescriptor>-->
+                    <!--<restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>-->
+                    <!--<methods>get</methods>-->
+                <!--</function>-->
+
+                <function id="SIMCardsForChange" url="{subscriberId}/SIMCards/{simCardId}/availableForChange">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+                <function id="SIMCardsForLink" url="{subscriberId}/SIMCards/availableForLinking">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+                <function id="SIMCardOptionalCharges" url="{subscriberId}/SIMCards/chargeMode">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="SIMCardLinkCheck" url="{subscriberId}/SIMCards/linkCheck">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="SIMCardLink" url="{subscriberId}/SIMCards/link">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="newRUIMCard" url="{subscriberId}/SIMCards/newRUIM">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+
+                <!-- access method -->
+                <function id="subscriberOneSIMCardAllowedURLS" url="{subscriberId}/SIMCards/{simCardId}/allowedURL">
+                    <description/>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <methods>get</methods>
+                    <processWithObject>com.peterservice.oapi.service.accessbeans.GetAllowedURLsImpl</processWithObject>
+                </function>
+
+                <function id="SIMCardsChangeAllowed" url="{subscriberId}/SIMCards/{simCardId}/changeAllowed">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+                <function id="SIMCardChangeCheck" url="{subscriberId}/SIMCards/{simCardId}/changeCheck">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="SIMCardChangeCharges" url="{subscriberId}/SIMCards/change/charges">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="SIMCardChange" url="{subscriberId}/SIMCards/{simCardId}/change">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="subscriberSimCardsOne" url="{subscriberId}/SIMCards/{simCardId}">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="subscriberSimCardsSearch" url="{subscriberId}/SIMCards/search">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_SUBSCRIBER_SIM_CARDS</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="subscriberSimCards" url="{subscriberId}/SIMCards">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>{subscriberId}/SIMCards/search</customBackendFunctionUrl>
+                </function>
+
+                <!-- packs -->
+
+                <function id="subscriberPackListInfo1" url="{subscriberId}/packs/subscriberPackListInfo1">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get,post</methods>
+                    <internalOnly>true</internalOnly>
+                </function>
+                <function id="subscriberPackListInfo2" url="{subscriberId}/packs/subscriberPackListInfo2">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get,post</methods>
+                    <internalOnly>true</internalOnly>
+                </function>
+                <function id="packAvailableForActivateListInfo1" url="{subscriberId}/packs/availableForActivateListInfo1">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get,post</methods>
+                    <internalOnly>true</internalOnly>
+                </function>
+                <function id="packAvailableForActivateListInfo2" url="{subscriberId}/packs/availableForActivateListInfo2">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get,post</methods>
+                    <internalOnly>true</internalOnly>
+                </function>
+                <function id="packActivationParametersDefaultValue" url="{subscriberId}/packs/activate/parameters">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="packActivateCheck" url="{subscriberId}/packs/activate/check">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="packActivateChargesSearch" url="{subscriberId}/packs/activate/charges/search">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_PACK_ACTIVATE_CHARGES</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="packActivateCharges" url="{subscriberId}/packs/activate/charges">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>{subscriberId}/packs/activate/charges/search</customBackendFunctionUrl>
+                </function>
+                <function id="packActivate" url="{subscriberId}/packs/activate">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="subscriberPackCosts" url="{subscriberId}/packs/{subscriberPackId}/packCosts">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <internalOnly>true</internalOnly>
+                </function>
+                <function id="subscriberPackHistory" url="{subscriberId}/packs/{subscriberPackId}/history">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+                <function id="subscriberPackDiscounts" url="{subscriberId}/packs/{subscriberPackId}/discounts">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <internalOnly>true</internalOnly>
+                </function>
+
+                <function id="packDeactivationParametersDefaultValue" url="{subscriberId}/packs/{subscriberPackId}/deactivate/parameters">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="packDeactivateCheck" url="{subscriberId}/packs/{subscriberPackId}/deactivate/check">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="packDeactivateChargesSearch" url="{subscriberId}/packs/{subscriberPackId}/deactivate/charges/search">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_PACK_DEACTIVATE_CHARGES</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="packDeactivateCharges" url="{subscriberId}/packs/{subscriberPackId}/deactivate/charges">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>{subscriberId}/packs/{subscriberPackId}/deactivate/charges/search</customBackendFunctionUrl>
+                </function>
+                <function id="packDeactivate" url="{subscriberId}/packs/{subscriberPackId}/deactivate">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="subscriberPackSubscriptionFeeDiscount" url="{subscriberId}/packs/{subscriberPackId}/packSubscriptionFeeDiscount">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <internalOnly>true</internalOnly>
+                </function>
+                <function id="packUpdate" url="{subscriberId}/packs/{subscriberPackId}">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>put</methods>
+                </function>
+               <function id="subscriberPack" url="{subscriberId}/packs/{subscriberPackId}/baseInfo">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                   <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+                <!-- subscriber status -->
+                <function id="getBlockSubscriberParams" url="{subscriberId}/block/parameters">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="getUnblockSubscriberParams" url="{subscriberId}/unblock/parameters">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="subscriberBlockUnblockCharges" url="{subscriberId}/block/charges">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="subscriberUnblockCharges" url="{subscriberId}/unblock/charges">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="subscriberBlockCheck" url="{subscriberId}/blockCheck">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="subscriberBlock" url="{subscriberId}/block">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="subscriberUnblockCheck" url="{subscriberId}/unblockCheck">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="subscriberUnblock" url="{subscriberId}/unblock">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="subscriberIdByMsisdn" url="/byMSISDN/{msisdn}">
+                    <description>Root function to convert MSISDN to subscriber id</description>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+
+                <function id="subscribersRootAccess" url="/getAllowedURL">
+                    <description>Function to check access rights</description>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <methods>get</methods>
+                    <processWithObject>com.peterservice.oapi.service.accessbeans.aggregate.GetAllowedURLsCompositeImpl</processWithObject>
+                </function>
+
+
+                <function id="servicesAvailableForActivateSearch" url="/{subscriberId}/services/availableForActivate/search" useBeanProcessor="true">
+                    <description>Function to search for services available for activation</description>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="servicesAvailableForActivate" url="/{subscriberId}/services/availableForActivate" useBeanProcessor="true">
+                    <description>Function to get services available for activation</description>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                 <function id="subscriberServiceRoot" url="/{subscriberId}/services/{serviceId}/aggregate" useBeanProcessor="true">
+                    <description>Function to get composite subscriber service information</description>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <internalOnly>true</internalOnly>
+                </function>
+                <function id="subscriberServiceRootGUPEnriched" url="/{subscriberId}/services/{serviceId}">
+                    <description>Function to get subscriber service information enriched with data from GUP</description>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <processWithObject>com.peterservice.openapi.subscribers.GUPProfilesProcessorOneService</processWithObject>
+                </function>
+                <function id="subscribersServices" url="/{subscriberId}/services">
+                    <description>Function to get subscriber services</description>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                        <role>ROLE_OAPI10ResourceOwner</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <processWithObject>com.peterservice.openapi.subscribers.GUPProfilesProcessor</processWithObject>
+                </function>
+                <function id="subscriberServiceRequest" url="/{subscriberId}/requests/{requestId}" useBeanProcessor="true">
+                    <description>Function to get request details</description>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="servicesWithCharges" url="{subscriberId}/services/withCharges">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+                <function id="subscribersPacksToActivateSearch" url="/{subscriberId}/packs/availableForActivate/search" useBeanProcessor="true">
+                    <description>Function to get packs available for activation</description>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="subscribersPacksToActivate" url="/{subscriberId}/packs/availableForActivate" useBeanProcessor="true">
+                    <description>Function to get packs available for activation</description>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="subscribersPacksSearch" url="/{subscriberId}/packs/search" useBeanProcessor="true">
+                    <description>Root function to get all subscriber packs</description>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="subscribersOnePackRootHelper" url="/{subscriberId}/packs/{subscriberPackId}/helper" useBeanProcessor="true">
+                    <description>Root function to get subscriber pack</description>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <internalOnly>true</internalOnly>
+                </function>
+                <function id="subscribersOnePackRoot" url="/{subscriberId}/packs/{subscriberPackId}">
+                    <description>Root function to get subscriber pack</description>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <processWithObject>com.peterservice.openapi.subscribers.OneSubscriberPacketProcessor</processWithObject>
+                </function>
+
+                <function id="subscribersPacksRoot" url="/{subscriberId}/packs" useBeanProcessor="true">
+                    <description>Root function to get all subscriber packs</description>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+                <function id="servicesAvailableForManualBanSearch" url="{subscriberId}/services/availableForManualBan/search" useBeanProcessor="true">
+                    <description/>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="servicesAvailableForManualBan" url="{subscriberId}/services/availableForManualBan" useBeanProcessor="true">
+                    <description/>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+
+                <function id="chargesAvailableForAddSearch" url="{subscriberId}/charges/availableForAdd/search">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="chargesAvailableForAdd" url="{subscriberId}/charges/availableForAdd">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_CHARGES_AVAILABLE_FOR_ADD_SEARCH</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>{subscriberId}/charges/availableForAdd/search</customBackendFunctionUrl>
+                </function>
+                <function id="chargesAddRecalculate" url="{subscriberId}/charges/add/recalculateVAT">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="chargesAdd" url="{subscriberId}/charges">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+
+                <function id="getCharges" url="{subscriberId}/charges">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_GET_CHARGES_SEARCH</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>{subscriberId}/charges/search</customBackendFunctionUrl>
+                </function>
+                <function id="getChargesSearch" url="{subscriberId}/charges/search">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+
+
+                <function id="callsDetalizationParametersForSubscriber" url="{subscriberId}/reports/callsDetalization/parameters">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="subscribersBillsChargeDB" url="{subscriberId}/bills">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="subscribersBillsChargeDBMapSearch" url="{subscriberId}/bills/search">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_SUBSCRIBERS_BILLS_CHARGE_DB</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                    <customBackendFunctionUrl>{subscriberId}/bills</customBackendFunctionUrl>
+                </function>
+                <function id="subscribersRatePlanHistoriesChargeDB" url="{subscriberId}/ratePlan/histories/search">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="subscribersRatePlanHistoriesChargeDBGet" url="{subscriberId}/ratePlan/histories">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_SUBSCRIBERS_RATE_PLAN_HISTORIES_CHARGE_DB</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>{subscriberId}/ratePlan/histories/search</customBackendFunctionUrl>
+                </function>
+                <function id="subscribersChargeDB" url="search">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="subscribersChargeDBGet" url="">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_SUBSCRIBERS_CHARGE_DB</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>search</customBackendFunctionUrl>
+                </function>
+                <function id="subscribersBelongToCustomerHistoryChargeDB" url="belongToCustomer/histories/search">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="subscribersBelongToCustomerHistoryChargeDBGet" url="belongToCustomer/histories">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_SUBSCRIBERS_BELONG_TO_CUSTOMER_HISTORY_CHARGE_DB</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>belongToCustomer/histories/search</customBackendFunctionUrl>
+                </function>
+
+
+
+                <function id="runBillingByCharges" url="{subscriberId}/charges/runBilling">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="chargesAnnul" url="{subscriberId}/charges/{chargeId}/annul">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="chargesEdit" url="{subscriberId}/charges/{chargeId}">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>put</methods>
+                </function>
+                <function id="getChargeInfo" url="{subscriberId}/charges/{chargeId}">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>{subscriberId}/charges/{chargeId}/info</customBackendFunctionUrl>
+                </function>
+                <function id="getChargeAdjustments" url="{subscriberId}/charges/{chargeId}/adjustments">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_GET_CHARGE_ADJUSTMENTS_SEARCH</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>{subscriberId}/charges/{chargeId}/adjustments/search</customBackendFunctionUrl>
+                </function>
+                <function id="getChargeAdjustmentsSearch" url="{subscriberId}/charges/{chargeId}/adjustments/search">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+
+
+
+                <function id="includeSubscriberInPrivateGroup" url="{subscriberId}/includeInPrivateGroup">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="excludeSubscriberFromPrivateGroup" url="{subscriberId}/excludeFromPrivateGroup">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+
+
+                <!--https://confluence.billing.ru/pages/viewpage.action?pageId=24447761#id-Абонентстандартовbroadband,custom-ПолучениепараметровпоискакомплектовстандартовШПД-->
+                <!--1.2.1. Получение параметров поиска комплектов стандартов ШПД-->
+                <function id="broadbandSubscriberKitSearchParameters" url="broadband/kits/search/parameters">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+                <!--https://confluence.billing.ru/pages/viewpage.action?pageId=24447761#id-Абонентстандартовbroadband,custom-ПоисккомплектовстандартаШПД-->
+                <!--1.2.2. Поиск комплектов стандарта ШПД-->
+                <function id="broadbandSubscriberKits" url="broadband/kits/search">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="broadbandSubscriberKitsGet" url="broadband/kits">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_BROADBAND_SUBSCRIBER_KITS</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>broadband/kits/search</customBackendFunctionUrl>
+                </function>
+
+
+                <!--https://confluence.billing.ru/pages/viewpage.action?pageId=24447761#id-Абонентстандартовbroadband,custom-ПолучениепараметровдлярегистрацииабонентастандартаШПДизкомплекта-->
+                <!--1.2.3. Получение параметров для регистрации абонента стандарта ШПД из комплекта-->
+                <function id="broadbandSubscriberFromKitRegistrationParameters" url="broadband/fromKit/add/parameters">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <!--https://confluence.billing.ru/pages/viewpage.action?pageId=24447761#id-Абонентстандартовbroadband,custom-ПолучениеспискаТПдоступныхдляподключенияабонентамуниверсальногостандарта-->
+                <!--2.5. Получение списка ТП доступных для подключения абонентам универсального стандарта-->
+                <function id="getRatePlansForCustomerSubscriberAdd" url="custom/ratePlans/availableForAssign/search">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                    <attributesAuthorizationObject>entity/Subscriber</attributesAuthorizationObject>
+                </function>
+                <function id="getRatePlansForCustomerSubscriberAddGet" url="custom/ratePlans/availableForAssign">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_GET_RATE_PLANS_FOR_CUSTOMER_SUBSCRIBER_ADD</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>custom/ratePlans/availableForAssign/search</customBackendFunctionUrl>
+                    <attributesAuthorizationObject>entity/Subscriber</attributesAuthorizationObject>
+                </function>
+
+                <!--https://confluence.billing.ru/pages/viewpage.action?pageId=22718853#id-Абонент-ПолучениеспискаТПдоступныхдляподключенияабонентамстандартаGSM\CDMA\PSTN-->
+                <!--4.3. Получение списка ТП доступных для подключения абонентам стандарта GSM\CDMA\PSTN-->
+                <function id="ratePlansForRegistrationMobile" url="mobile/ratePlans/availableForAssign/search">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                    <attributesAuthorizationObject>entity/Subscriber</attributesAuthorizationObject>
+                </function>
+                <function id="ratePlansForRegistrationMobileGet" url="mobile/ratePlans/availableForAssign">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_RATE_PLANS_FOR_REGISTRATION_MOBILE</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>mobile/ratePlans/availableForAssign/search</customBackendFunctionUrl>
+                    <attributesAuthorizationObject>entity/Subscriber</attributesAuthorizationObject>
+                </function>
+                <function id="ratePlansForPSTNAvailableForAssign" url="PSTN/ratePlans/availableForAssign/search">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                    <attributesAuthorizationObject>entity/Subscriber</attributesAuthorizationObject>
+                </function>
+                <function id="ratePlansForPSTNAvailableForAssignGet" url="PSTN/ratePlans/availableForAssign">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_RATE_PLANS_FOR_PSTN_AVAILABLE_FOR_ASSIGN</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>PSTN/ratePlans/availableForAssign/search</customBackendFunctionUrl>
+                    <attributesAuthorizationObject>entity/Subscriber</attributesAuthorizationObject>
+                </function>
+
+                <!--https://confluence.billing.ru/pages/viewpage.action?pageId=22718853#id-Абонент-ПолучениепараметровпоискакомплектовстандартовGSM\CDMA-->
+                <!--5.1.1. Получение параметров поиска комплектов стандартов GSM\CDMA-->
+                <function id="mobileKitSearchParameters" url="mobile/kits/search/parameters">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+                <!-- 4.1.2. Поиск комплектов стандарта GSM\CDMA -->
+                <function id="mobileKits" url="mobile/kits/search">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                    <attributesAuthorizationObject>entity/Subscriber</attributesAuthorizationObject>
+                </function>
+                <function id="mobileKitsGet" url="mobile/kits">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_MOBILE_KITS</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>mobile/kits/search</customBackendFunctionUrl>
+                    <attributesAuthorizationObject>entity/Subscriber</attributesAuthorizationObject>
+                </function>
+
+
+                <!--ФС 47682 5.1.4. Получение параметров для регистрации абонента стандарта GSM\CDMA из комплекта-->
+                <function id="subscriberRegParameters" url="mobile/fromKit/add/parameters">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+                <!--https://confluence.billing.ru/pages/viewpage.action?pageId=22718853#id-Абонент-ПроверкавозможностииспользованиякомплектастандартаGSM\CDMAдлярегистрацииабонента-->
+                <!--4.1.3. Проверка возможности использования комплекта стандарта GSM\CDMA для регистрации абонента-->
+                <function id="checkAvailabilityMobileKitsForRegistration" url="mobile/kits/checkAvailabilityForRegistration">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                    <attributesAuthorizationObject>entity/Subscriber</attributesAuthorizationObject>
+                </function>
+
+                <!--https://confluence.billing.ru/pages/viewpage.action?pageId=22718853#id-Абонент-ПолучениешаблонаабонентскихданныхстандартаGSM\CDMAдлярегистрацииизкомплекта-->
+                <!--4.1.5. Получение шаблона абонентских данных стандарта GSM\CDMA для регистрации из  комплекта-->
+                <function id="subscriberRegKitTemplate" url="mobile/templates/fromKit">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+
+                <!--4.2.2.1. Получение шаблона абонентских данных стандарта GSM\CDMA для регистрации из  телефонного номера-->
+                <!--https://confluence.billing.ru/pages/viewpage.action?pageId=22718853#id-Абонент-ПолучениешаблонаабонентскихданныхстандартаGSM\CDMAдлярегистрацииизтелефонногономера-->
+                <function id="subscriberRegPhoneNumberTemplate" url="mobile/templates/fromPhoneNumber">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <attributesAuthorizationObject>entity/Subscriber</attributesAuthorizationObject>
+                </function>
+
+                <!--https://confluence.billing.ru/pages/viewpage.action?pageId=22718853#id-Абонент-Получениеобщихпараметровдлярегистрацииабонента-->
+                <!--7.1. Получение общих параметров для регистрации абонента-->
+                <function id="subscriberAddParameters" url="add/parameters">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+                <!--https://confluence.billing.ru/pages/viewpage.action?pageId=24447761#id-Абонентстандартовbroadband,custom-Получениешаблонаабонентскихданныхуниверсальногостандарта-->
+                <!--2.2. Получение шаблона абонентских данных универсального стандарта-->
+                <function id="customSubscriberTemplate" url="custom/templates/fromIdentifier">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+
+                <!--4.2.3.1. Получение шаблона абонентских данных стандарта PSTN для регистрации из  телефонного номера-->
+                <function id="broadbandKitTemplate" url="broadband/templates/fromKit">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+
+                <!--1.2.4. Получение шаблона абонентских данных стандарта ШПД для регистрации из комплекта -->
+                <function id="subscriberPSTNTemplate" url="PSTN/templates/fromPhoneNumber">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+
+                <!--1.2.4. Получение шаблона абонентских данных стандарта ШПД для регистрации из идентификатора -->
+                <function id="broadbandNetworkIdentifierTemplate" url="broadband/templates/fromIdentifier">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+                <function id="changeRatePlan" url="{subscriberId}/ratePlans/{ratePlanId}/change">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+
+                <!--https://confluence.billing.ru/pages/viewpage.action?pageId=24447761#id-Абонентстандартовbroadband,custom-ПолучениеспискаТПдоступныхдляподключенияабонентамстандартаШПД-->
+                <!--1.4. Получение списка ТП доступных для подключения абонентам стандарта ШПД-->
+                <function id="ratePlansForBroadbandSubscriberAdd" url="broadband/ratePlans/availableForAssign/search">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="ratePlansForBroadbandSubscriberAddGet" url="broadband/ratePlans/availableForAssign">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_RATE_PLANS_FOR_BROADBAND_SUBSCRIBER_ADD</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>broadband/ratePlans/availableForAssign/search</customBackendFunctionUrl>
+                </function>
+
+
+                <!--ChargesDB Proxy for subscribers TS 41882 -->
+                <function id="subscriberDiscounts" url="{subscriberId}/discounts" useBeanProcessor="true">
+                    <description/>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="subscriberDiscountsSearch" url="{subscriberId}/discounts/search" useBeanProcessor="true">
+                    <description/>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="subscriberDiscount" url="{subscriberId}/discounts/{discountId}" useBeanProcessor="true">
+                    <description/>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="subscriberLightDiscounts" url="{subscriberId}/discountsLight" useBeanProcessor="true">
+                    <description/>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="subscriberLightDiscountsSearch" url="{subscriberId}/discountsLight/search" useBeanProcessor="true">
+                    <description/>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="subscriberDiscountVolumesByDetailIdSearch" url="{subscriberId}/discounts/{discountId}/discountDetails/{discountDetailId}/volumes/search" useBeanProcessor="true">
+                    <description/>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+                <function id="subscriberDiscountVolumesByDetailId" url="{subscriberId}/discounts/{discountId}/discountDetails/{discountDetailId}/volumes" useBeanProcessor="true">
+                    <description/>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+
+                <!--Charges DB PART II-->
+                <function id="subscriberCalls" url="{subscriberId}/calls" useBeanProcessor="true">
+                    <description></description>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <methods>get</methods>
+                </function>
+                <function id="subscriberCall" url="{subscriberId}/calls/{callId}" useBeanProcessor="true">
+                    <description></description>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <methods>get</methods>
+                </function>
+                <function id="subscriberCallsSearch" url="{subscriberId}/calls/search" useBeanProcessor="true">
+                    <description></description>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <methods>post</methods>
+                </function>
+                <function id="subscriberCallsAggregatesByPeriod" url="{subscriberId}/calls/aggregates/byPeriod" useBeanProcessor="true">
+                    <description></description>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <methods>get</methods>
+                </function>
+                <function id="subscriberCallsAggregatesByPeriodSearch" url="{subscriberId}/calls/aggregates/byPeriod/search" useBeanProcessor="true">
+                    <description></description>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <methods>post</methods>
+                </function>
+
+                <!--Temporaly removed from 7.1 release  -->
+                <!--<function id="subscriberCommonSpends" url="{subscriberId}/commonSpend" useBeanProcessor="true">-->
+                    <!--<description/>-->
+                    <!--<access>-->
+                        <!--<role>ROLE_Anybody</role>-->
+                    <!--</access>-->
+                    <!--<externalAccessDescriptor>*</externalAccessDescriptor>-->
+                    <!--<restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>-->
+                    <!--<methods>get</methods>-->
+                <!--</function>-->
+                <!--<function id="subscriberCommonSpendsSearch" url="{subscriberId}/commonSpend/search" useBeanProcessor="true">-->
+                    <!--<description/>-->
+                    <!--<access>-->
+                        <!--<role>ROLE_Anybody</role>-->
+                    <!--</access>-->
+                    <!--<externalAccessDescriptor>*</externalAccessDescriptor>-->
+                    <!--<restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>-->
+                    <!--<methods>post</methods>-->
+                <!--</function>-->
+                <!--<function id="subscriberCommonSpend" url="{subscriberId}/commonSpend/{commonSpendId}" useBeanProcessor="true">-->
+                    <!--<description/>-->
+                    <!--<access>-->
+                        <!--<role>ROLE_Anybody</role>-->
+                    <!--</access>-->
+                    <!--<externalAccessDescriptor>*</externalAccessDescriptor>-->
+                    <!--<restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>-->
+                    <!--<methods>get</methods>-->
+                <!--</function>-->
+
+                <function id="closeGupProfile" url="{subscriberId}/services/{serviceId}/closeGupProfile">
+                    <description/>
+		            <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                    <processWithObject>com.peterservice.openapi.subscribers.GupProfilesCloseProcessor</processWithObject>
+                </function>
+
+                <function id="subscriberAccountTypes" url="{subscriberId}/accountTypes">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_BACKEND_SUBSCRIBER_ACCOUNT_TYPES_SEARCH</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <customBackendFunctionUrl>{subscriberId}/accountTypes/search</customBackendFunctionUrl>
+                </function>
+
+                <function id="subscriberAccountTypesSearch" url="{subscriberId}/accountTypes/search">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>post</methods>
+                </function>
+
+                <!--For Data Mart own functions-->
+                <function id="subscriberAccounts" url="{subscriberId}/accounts">
+                    <description/>
+                    <externalAccessDescriptor>*</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <!--DATA MART proxies-->
+                <function id="aggregatesSummaryDatamart" url="{subscriberId}/customers/{customerId}/aggregates/summary" useBeanProcessor="true">
+                    <description/>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="summaryDatamart" url="{subscriberId}/customers/{customerId}/aggregates/{aggregateId}" useBeanProcessor="true">
+                    <description/>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+
+                <!--QUOTADISP proxies-->
+                <!--TS 47185-->
+                <function id="getServicePlanQosList" url="{subscriberId}/QoS/servicePlans" useBeanProcessor="true">
+                    <description/>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="postServicePlanQosList" url="{subscriberId}/QoS/servicePlans/search" useBeanProcessor="true">
+                    <description/>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="getServicePlanQos" url="{subscriberId}/QoS/servicePlans/{code}" useBeanProcessor="true">
+                    <description/>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+                <!--TS 50300 TDM proxies -->
+                <function id="getTrafficBySiteCategories" url="{subscriberId}/ipEventReports/trafficBySiteCategories" useBeanProcessor="true">
+                    <description/>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="getSiteTopsByTrafficSpend" url="{subscriberId}/ipEventReports/siteTopsByTrafficSpend" useBeanProcessor="true">
+                    <description/>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="getTimeDistributionBySiteCategories" url="{subscriberId}/ipEventReports/timeDistributionBySiteCategories" useBeanProcessor="true">
+                    <description/>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="getSiteTopsByTimeSpend" url="{subscriberId}/ipEventReports/siteTopsByTimeSpend" useBeanProcessor="true">
+                    <description/>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="getProtocolTypeByPeriod" url="{subscriberId}/ipEventReports/protocolTypeByPeriod" useBeanProcessor="true">
+                    <description/>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+                <function id="getTrafficByDevice" url="{subscriberId}/ipEventReports/trafficByDevice" useBeanProcessor="true">
+                    <description/>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                </function>
+
+                <!--DO NOT MOVE OUT!!! It is not processed by a BIS/CRM backend -->
+                <function id="subscriberLocation" url="{subscriberId}/location" dontRoute="true">
+                    <description/>
+                    <externalAccessDescriptor>OAPI_BIS_API_FRONTEND_SUBSCRIBER_LOCATION</externalAccessDescriptor>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <processWithObject>com.peterservice.openapi.subscribers.SubscriberLocationProcessor</processWithObject>
+                </function>
+
+                <!-- Получение списка тарификационных профилей абонента -->
+                <function id="subscriberRatingProfileList" url="{subscriberId}/ratingOptions/ratingProfileList">
+                  <description/>
+                  <externalAccessDescriptor>*</externalAccessDescriptor>
+                  <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                  <methods>get</methods>
+                  <internalOnly>true</internalOnly>
+                </function>
+
+                <!--Проверка возможности создания тарифного предложения абонента, внутренняя-->
+                <function id="subscriberRatingOptionsAddCheck" url="{subscriberId}/ratingOptions/add/checkInternal">
+                  <description/>
+                  <externalAccessDescriptor>*</externalAccessDescriptor>
+                  <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                  <methods>post</methods>
+                  <customBackendFunctionUrl>{subscriberId}/ratingOptions/add/check</customBackendFunctionUrl>
+                  <internalOnly>true</internalOnly>
+                </function>
+                <!--Проверка возможности создания тарифного предложения абонента-->
+                <function id="subscriberRatingOptionsAddCheckJava" url="{subscriberId}/ratingOptions/add/check">
+                  <description/>
+                  <externalAccessDescriptor>OAPI_BIS_API_BACKEND_SUBSCRIBER_RATING_OPTIONS_ADD_CHECK</externalAccessDescriptor>
+                  <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                  <methods>post</methods>
+                  <processWithObject>com.peterservice.openapi.subscribers.ratingOptions.OneRatingOptionAddCheckProcessor</processWithObject>
+                </function>
+
+                <!--Проверка возможности изменения тарифного предложения абонента, внутренняя-->
+                <function id="subscriberRatingOptionsUpdateCheck" url="{subscriberId}/ratingOptions/{ratingOptionId}/change/checkInternal">
+                  <description/>
+                  <externalAccessDescriptor>*</externalAccessDescriptor>
+                  <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                  <methods>post</methods>
+                  <customBackendFunctionUrl>{subscriberId}/ratingOptions/{ratingOptionId}/change/check</customBackendFunctionUrl>
+                  <internalOnly>true</internalOnly>
+                </function>
+                <!--Проверка возможности создания тарифного предложения абонента-->
+                <function id="subscriberRatingOptionsUpdateCheckJava" url="{subscriberId}/ratingOptions/{ratingOptionId}/change/check">
+                  <description/>
+                  <externalAccessDescriptor>OAPI_BIS_API_BACKEND_SUBSCRIBER_RATING_OPTIONS_UPDATE_CHECK</externalAccessDescriptor>
+                  <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                  <methods>post</methods>
+                  <processWithObject>com.peterservice.openapi.subscribers.ratingOptions.OneRatingOptionUpdateCheckProcessor</processWithObject>
+                </function>
+
+                <!--Получение списка доступных действий с тарифными предложениями абонента-->
+                <function id="ratingOptionsAllowedActions" url="{subscriberId}/ratingOptions/allowedActions">
+                  <description/>
+                  <access>
+                    <role>ROLE_OAPISubscriber:RatingOptionBase</role>
+                  </access>
+                  <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                  <methods>get</methods>
+                  <processWithObject>com.peterservice.openapi.subscribers.ratingOptions.RatingOptionsAccessInfoProcessor</processWithObject>
+                </function>
+
+                <function id="ratingOptionsAllowedActionsSearch" url="{subscriberId}/ratingOptions/allowedActions/search">
+                  <description/>
+                  <access>
+                    <role>ROLE_OAPISubscriber:RatingOptionBase</role>
+                  </access>
+                  <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                  <methods>post</methods>
+                  <processWithObject>com.peterservice.openapi.subscribers.ratingOptions.RatingOptionsAccessInfoProcessor</processWithObject>
+                </function>
+
+                <!--Получение списка доступных действий с тарифным предложением абонента-->
+                <function id="oneRatingOptionsAllowedActions" url="{subscriberId}/ratingOptions/{ratingOptionId}/allowedActions">
+                  <description/>
+                  <access>
+                    <role>ROLE_OAPISubscriber:RatingOptionBase</role>
+                  </access>
+                  <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                  <methods>get</methods>
+                  <processWithObject>com.peterservice.openapi.subscribers.ratingOptions.OneRatingOptionsAccessInfoProcessor</processWithObject>
+                </function>
+
+                <function id="oneRatingOptionAllowedActionsSearch" url="{subscriberId}/ratingOptions/{ratingOptionId}/allowedActions/search">
+                  <description/>
+                  <access>
+                    <role>ROLE_OAPISubscriber:RatingOptionBase</role>
+                  </access>
+                  <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                  <methods>post</methods>
+                  <processWithObject>com.peterservice.openapi.subscribers.ratingOptions.OneRatingOptionsAccessInfoProcessor</processWithObject>
+                </function>
+
+                <!--Получение тарифного предложения абонента-->
+                <function id="subscriberRatingOption" url="{subscriberId}/ratingOptions/{ratingOptionId}">
+                  <description/>
+                  <externalAccessDescriptor>*</externalAccessDescriptor>
+                  <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                  <methods>get</methods>
+                  <customBackendFunctionUrl>{subscriberId}/ratingOptions/{ratingOptionId}/ratingOption</customBackendFunctionUrl>
+                </function>
+
+                <!--Изменение тарифного предложения абонента-->
+                <function id="subscriberRatingOptionsUpdate" url="{subscriberId}/ratingOptions/{ratingOptionId}">
+                  <description/>
+                  <externalAccessDescriptor>*</externalAccessDescriptor>
+                  <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                  <methods>put</methods>
+                </function>
+
+                <!--Получение списка тарифных предложений абонента-->
+                <function id="subscriberRatingOptionList" url="{subscriberId}/ratingOptions">
+                  <description/>
+                  <externalAccessDescriptor>*</externalAccessDescriptor>
+                  <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                  <methods>get</methods>
+                </function>
+
+                <!--synthetic for tests-->
+                <function id="Synthetic1" url="test/ratingOptions/{id}">
+                    <description/>
+                    <methods>get</methods>
+                </function>
+                <function id="Synthetic2" url="test/{someId}/{id}">
+                    <description/>
+                    <methods>get</methods>
+                </function>
+                <function id="Synthetic2" url="test/{someId}/567">
+                    <description/>
+                    <methods>get</methods>
+                </function>
+
+
+                <!--Создание тарифного предложения абонента, внутренняя-->
+                <function id="subscriberRatingOptionsAdd" url="{subscriberId}/ratingOptionsInternal">
+                  <description/>
+                  <externalAccessDescriptor>*</externalAccessDescriptor>
+                  <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                  <methods>post</methods>
+                  <customBackendFunctionUrl>{subscriberId}/ratingOptions/add</customBackendFunctionUrl>
+                  <internalOnly>true</internalOnly>
+                </function>
+                <!--Создание тарифного предложения абонента-->
+                <function id="subscriberRatingOptionsAddJava" url="{subscriberId}/ratingOptions">
+                  <description/>
+                  <externalAccessDescriptor>OAPI_BIS_API_BACKEND_SUBSCRIBER_RATING_OPTIONS_ADD</externalAccessDescriptor>
+                  <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                  <methods>post</methods>
+                  <processWithObject>com.peterservice.openapi.subscribers.ratingOptions.OneRatingOptionAddVSChecksProcessor</processWithObject>
+                </function>
+
+                <!--Отображение информации из Git-->
+                <function id="serviceVersion" url="serviceVersion">
+                    <description/>
+                    <access><role>ROLE_Anybody</role></access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <processWithObject>com.peterservice.openapi.subscribers.ServiceVersion</processWithObject>
+                </function>
+
+                <!-- need to go last -->
+                <function id="subscribersRoot" url="/{subscriberId}" useBeanProcessor="true">
+                    <description>Root function to get subscriber attributes</description>
+                    <access>
+                        <role>ROLE_Anybody</role>
+                    </access>
+                    <restrictions><requiredOption>O_OAPI_BIS_EXT</requiredOption></restrictions>
+                    <methods>get</methods>
+                    <attributesAuthorizationObject>entity/Subscriber</attributesAuthorizationObject>
+                </function>
+
+            </api-functions>
+        </restlet-to-restlet>
+    </openapi-service>
+</beans>
